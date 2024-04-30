@@ -1,0 +1,23 @@
+$main-color: #fff;
+$border-color: #2c333a;
+$bg-color: #1b1f23;
+$good: #138d7f;
+
+$mono-font: "Source Code Pro Variable", monospace;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter Variable", sans-serif;
+}
+
+body {
+  background: #1a1d22;
+  color: #d7e2eb;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
