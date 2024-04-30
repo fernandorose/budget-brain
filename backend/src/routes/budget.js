@@ -10,6 +10,7 @@ router
     budgetServices.getBudgetByUserIdAndBudgetId
   )
   .get("/budget/get/:budgetId", budgetServices.getBudgetById)
+  .delete("/budget/delete/:budgetId", budgetServices.deleteBudgetById)
   .post("/budgets/create/:userId", budgetServices.createBudget);
 
 export default router;

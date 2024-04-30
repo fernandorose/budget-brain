@@ -59,3 +59,25 @@ export const createBudget = async (req, res) => {
   });
   res.json(create);
 };
+
+export const deleteBudgetById = async (req, res) => {
+  const { budgetId } = req.params;
+
+  try {
+    // Buscar el presupuesto por su identificador
+    const budget = await Budget.findByPk(budgetId);
+
+    // Verificar si el presupuesto existe
+    if (!budget) {
+      return res.status(404).json({ error: "Presupuesto no encontrado" });
+    }
+
+    // Eliminar el presupuesto
+    await budget.destroy();
+
+    res.status(204).end(); // Respuesta exitosa sin contenido
+  } catch (error) {
+    console.error("Error al eliminar el presupuesto:", error.message);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};

@@ -21,6 +21,9 @@ export const Transaction = sequelize.define(
       type: DataTypes.DATE,
       defaultValue: NOW,
     },
+    type: {
+      type: DataTypes.ENUM("income", "expense"),
+    },
   },
   {
     timestamps: false,
