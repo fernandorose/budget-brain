@@ -26,19 +26,13 @@ To get started with BudgetBrain, follow these steps:
 1. **Installation:** First, install all necessary packages by running:
 
    ```bash
-   npm install
-   ```
-
-   Or, if you prefer using pnpm:
-
-   ```bash
    pnpm install
    ```
 
 2. **Run Development Server:** Once the packages are installed, start the development server with:
 
    ```bash
-   npm run dev
+   pnpm --filter '**' dev
    ```
 
 3. **Explore:** You can now explore the BudgetBrain web application by navigating to [http://localhost:4000](http://localhost:4000) in your web browser.
