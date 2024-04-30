@@ -1,15 +1,29 @@
 $main-color: #fff;
 $border-color: #2c333a;
 $bg-color: #1b1f23;
-$good: #138d7f;
+$good: #02aa96;
+$bad: #aa0248;
+$bg-good: #00272256;
+$bg-bad: #22000e60;
 
 $mono-font: "Source Code Pro Variable", monospace;
+
+::-webkit-scrollbar {
+  width: 5px;
+  background: $border-color;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, $good, transparent);
+  border-radius: 50px;
+}
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Inter Variable", sans-serif;
+  color-scheme: dark;
 }
 
 body {
@@ -20,4 +34,23 @@ body {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+input {
+  padding: 10px;
+  outline: none;
+  border: solid 1px $border-color;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  outline: none;
+  border: solid 1px transparent;
+  border-radius: 5px;
+  background: $border-color;
 }

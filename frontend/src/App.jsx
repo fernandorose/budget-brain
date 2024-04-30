@@ -11,18 +11,21 @@ import SignIn from "./pages/sign/SignIn";
 import SignUp from "./pages/sign/SignUp";
 import BudgetDetail from "./pages/budget/BudgetDetail";
 import CategoryDetail from "./pages/category/CategoryDetail";
+import Budget from "./pages/budget/Budget";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/budget/:budgetId" element={<BudgetDetail />} />
-          <Route
-            path="/budget/category/:categoryId"
-            element={<CategoryDetail />}
-          />
+          <Route element={<Home />}>
+            <Route path="/budget/:budgetId" element={<BudgetDetail />} />
+            <Route path="/budget/" element={<Budget />} />
+            <Route
+              path="/budget/:budgetId/category/:categoryId"
+              element={<CategoryDetail />}
+            />
+          </Route>
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
         </Routes>

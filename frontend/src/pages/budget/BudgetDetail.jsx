@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
+import styles from "../../styles/budget.module.scss";
+import ConfirmationDelete from "./ConfirmationDelete";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/ReactToastify.css";
 
 const BudgetDetail = () => {
+  const navigate = useNavigate();
   const { budgetId } = useParams();
-
   const [budget, setBudget] = useState({});
   const [categories, setCategories] = useState([]);
-  const [transactions, setTransactions] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,30 +49,97 @@ const BudgetDetail = () => {
     fetchCategories();
   }, [budgetId]);
 
+  const handleDelete = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteConfirmed = async (confirmationText) => {
+    if (!confirmationText) {
+      // Mostrar notificación de error si no se proporcionó ningún texto
+      return toast.error(
+        "Por favor, ingresa el nombre del presupuesto para confirmar la eliminación."
+      );
+    }
+
+    if (confirmationText !== budget.name) {
+      // Mostrar notificación de error si el nombre ingresado no coincide con el nombre del presupuesto
+      return toast.error("El nombre del presupuesto ingresado es incorrecto.");
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/budget/delete/${budgetId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar el presupuesto");
+      }
+
+      setDeleted(true);
+      navigate("/budget");
+    } catch (error) {
+      console.error("Error al eliminar el presupuesto:", error.message);
+    }
+  };
   const formatDate = (dateString) => {
-    return format(new Date(dateString), "EEEE, d MMMM yyyy HH:mm");
+    return dateString
+      ? format(new Date(dateString), "EEEE, d MMMM yyyy HH:mm")
+      : "";
   };
 
   return (
     <>
-      <main>
-        <div>
+      <ToastContainer
+        hideProgressBar
+        theme="dark"
+        draggable
+        stacked
+        position="bottom-center"
+      />
+      <main className={styles.detailsContainer}>
+        <div className={styles.detailsTitle}>
+          <span> {budget.id}</span>
           <h1>{budget.name}</h1>
-          <h3>{budget.createdAt}</h3>
+          <h3>{formatDate(budget.createdAt)}</h3>
         </div>
-        <div>
-          <h1>Budget categories</h1>
+        <div className={styles.categoriesContainer}>
+          <h1>Categories:</h1>
           {categories.map((category) => (
-            <Link to={`/budget/category/${category.id}`} key={category.id}>
-              <div>
+            <Link
+              className={styles.categoryContainer}
+              to={`/budget/${budget.id}/category/${category.id}`}
+              key={category.id}
+            >
+              <div className={styles.categoryTitle}>
+                <span>{category.id}</span>
                 <h1>{category.name}</h1>
-                <h3>${category.limit}</h3>
-                <h3>${category.original_limit}</h3>
+              </div>
+              <div className={styles.pricing}>
+                <div>
+                  <span>Actual limit amount</span>
+                  <h3>${category.limit}</h3>
+                </div>
+                <div className={styles.original}>
+                  <span>Original limit amount</span>
+                  <h3>${category.original_limit}</h3>
+                </div>
               </div>
             </Link>
           ))}
         </div>
+        <footer className={styles.budgetFooter}>
+          <button onClick={handleDelete}>Delete this budget</button>
+        </footer>
       </main>
+      <ConfirmationDelete
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        onDeleteConfirmed={handleDeleteConfirmed}
+        budgetName={budget.name}
+      />
     </>
   );
 };

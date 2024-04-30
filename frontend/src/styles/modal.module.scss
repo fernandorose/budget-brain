@@ -1,0 +1,49 @@
+@import "./globals.modules.scss";
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  width: 400px;
+  padding: 20px;
+  background: $bg-color;
+  border: $border-color;
+  border-radius: 5px;
+  outline: none;
+  animation: show 400ms;
+
+  @keyframes show {
+    0% {
+      transform: scale(0.7);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
+
+.overlay {
+  position: fixed;
+  display: grid;
+  place-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(16, 16, 20, 0.74);
+  //backdrop-filter: blur(10px);
+}
+
+input {
+  font-family: $mono-font;
+}
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  .delete {
+    background-color: $bg-bad;
+    border: solid 1px $bad;
+  }
+}

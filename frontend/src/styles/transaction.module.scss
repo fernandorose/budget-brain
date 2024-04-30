@@ -1,0 +1,203 @@
+@import "./globals.modules.scss";
+.transactionsContainer {
+  display: flex;
+  flex-direction: column;
+  .transactionsTitle {
+    padding: 30px;
+    h1 {
+      background: linear-gradient(140deg, #d7e2eb, transparent 60%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  .transactions {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  //   .transactionContainer {
+  //     display: flex;
+  //     flex-direction: column;
+  //     border: solid 1px $border-color;
+  //     border-radius: 5px;
+  //     background: $bg-color;
+  //     width: fit-content;
+  //     padding: 20px;
+  //     .transactionTitle {
+  //       display: flex;
+  //       gap: 10px;
+  //       flex-direction: column;
+  //       span {
+  //         font-size: 0.8rem;
+  //         font-family: $mono-font;
+  //         color: $bad;
+  //       }
+  //       h1 {
+  //         font-size: 1.5rem;
+  //         font-weight: bold;
+  //         text-transform: capitalize;
+  //       }
+  //       .date {
+  //         font-family: $mono-font;
+  //         font-weight: normal;
+  //         font-size: 1rem;
+  //         color: $bad;
+  //       }
+  //     }
+  //     .amounts {
+  //       display: flex;
+  //       flex-direction: column;
+  //       gap: 5px;
+  //       h4 {
+  //         font-weight: normal;
+  //         font-family: $mono-font;
+  //         span {
+  //           color: $bad;
+  //         }
+  //       }
+  //       h3 {
+  //         font-family: $mono-font;
+  //         font-weight: normal;
+  //         color: $bad;
+  //       }
+  //     }
+  //   }
+  //   .transactionTitle::after {
+  //     content: "";
+  //     margin: 15px;
+  //     width: 100%;
+  //     height: 1px;
+  //     background: linear-gradient(90deg, $bad, transparent);
+  //   }
+  // }
+
+  .expenseTransaction {
+    overflow: hidden;
+    width: 300px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border: solid 1px $bad;
+    border-radius: 5px;
+    background: $bg-bad;
+    width: fit-content;
+    padding: 20px;
+    .transactionTitle {
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+      span {
+        font-size: 0.8rem;
+        font-family: $mono-font;
+        color: $bad;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-transform: capitalize;
+        background: linear-gradient(140deg, #d7e2eb, transparent 60%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .date {
+        font-family: $mono-font;
+        font-weight: normal;
+        font-size: 1rem;
+        color: $bad;
+      }
+    }
+    .amounts {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      span {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        color: $bad;
+        font-family: $mono-font;
+      }
+      h3 {
+        font-family: $mono-font;
+        font-weight: normal;
+        color: $bad;
+      }
+    }
+  }
+  // .transactionsTitle::after {
+  //   content: "";
+  //   margin: 15px;
+  //   width: 100%;
+  //   height: 1px;
+  //   background: linear-gradient(90deg, $bad, transparent);
+  // }
+
+  .incomeTransaction {
+    overflow: hidden;
+    width: 300px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border: solid 1px $good;
+    border-radius: 5px;
+    background: $bg-good;
+    width: fit-content;
+    padding: 20px;
+    .transactionTitle {
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+      span {
+        font-size: 0.8rem;
+        font-family: $mono-font;
+        color: $good;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-transform: capitalize;
+        background: linear-gradient(140deg, #d7e2eb, transparent 60%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .date {
+        font-family: $mono-font;
+        font-weight: normal;
+        font-size: 1rem;
+        color: $good;
+      }
+    }
+    .amounts {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      span {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        color: $good;
+        font-family: $mono-font;
+      }
+      h3 {
+        font-family: $mono-font;
+        font-weight: normal;
+        color: $good;
+      }
+    }
+  }
+  // .transactionsTitle::after {
+  //   content: "";
+  //   margin: 15px;
+  //   width: 100%;
+  //   height: 1px;
+  //   background: linear-gradient(90deg, $good, transparent);
+  // }
+}
