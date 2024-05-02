@@ -5,7 +5,7 @@ import "@fontsource-variable/source-code-pro";
 // Supports weights 100-900
 import "@fontsource-variable/inter";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/home/Home";
 import SignIn from "./pages/sign/SignIn";
 import SignUp from "./pages/sign/SignUp";
@@ -18,6 +18,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Navigate to={`/budget`} />} />
           <Route element={<Home />}>
             <Route path="/budget/:budgetId" element={<BudgetDetail />} />
             <Route path="/budget/" element={<Budget />} />

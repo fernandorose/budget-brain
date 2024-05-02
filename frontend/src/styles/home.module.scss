@@ -3,9 +3,13 @@
 .homeContainer {
   display: flex;
   width: 100%;
-  nav {
+  .aside {
+    position: relative;
     position: fixed;
-    width: 350px;
+    overflow: hidden;
+    overflow-y: auto;
+    //padding: 10px;
+    width: 400px;
     height: 100dvh;
     border-right: solid 1px $border-color;
     z-index: 1;
@@ -17,11 +21,12 @@
     .titleContainer {
       position: relative;
       position: fixed;
+      right: 0;
       display: flex;
-      width: 100%;
-      height: 35px;
-      padding-left: 350px;
-      background: linear-gradient(180deg, #1a1d22 50%, transparent);
+      width: calc(100% - 410px);
+      height: 50px;
+      background: #1a1d22;
+      z-index: 1;
       h1 {
         width: 200px;
         font-family: $mono-font;
@@ -35,7 +40,7 @@
         span {
           font-size: 1rem;
           font-family: $mono-font;
-          font-weight: bold;
+          font-weight: normal;
         }
         h5 {
           font-size: 0.45rem;
@@ -73,7 +78,7 @@
     }
     .mainContainer {
       padding-top: 50px;
-      padding-left: 350px;
+      padding-left: 400px;
     }
   }
 }

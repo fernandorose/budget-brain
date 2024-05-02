@@ -9,12 +9,20 @@ $bg-bad: #22000e60;
 $mono-font: "Source Code Pro Variable", monospace;
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 2px;
   background: $border-color;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, $good, transparent);
+  background: linear-gradient(
+    -45deg,
+    transparent,
+    #ee7752,
+    #e73c7e,
+    #23a6d5,
+    #23d5ab,
+    transparent
+  );
   border-radius: 50px;
 }
 
@@ -45,6 +53,9 @@ input {
   outline: none;
   border: solid 1px $border-color;
   border-radius: 5px;
+  &:focus {
+    border: solid 1px $good;
+  }
 }
 
 button {

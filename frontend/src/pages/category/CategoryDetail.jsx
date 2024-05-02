@@ -40,30 +40,36 @@ const CategoryDetail = () => {
           <h1>Transactions</h1>
         </div>
         <div className={styles.transactions}>
-          {transactions.map((transaction) => (
-            <div
-              className={`${styles.transactionContainer} ${
-                transaction.type === "expense"
-                  ? styles.expenseTransaction
-                  : styles.incomeTransaction
-              }`}
-              key={transaction.id}
-            >
-              <div className={styles.transactionTitle}>
-                <span>{transaction.id}</span>
-                <h1>{transaction.description}</h1>
-                <h3 className={styles.date}>
-                  {formatDate(transaction.createdAt)}
-                </h3>
-              </div>
-              <div className={styles.amounts}>
-                <span>{transaction.type}</span>
-
-                <h4>Transaction amount:</h4>
-                <h3>${transaction.amount}</h3>
-              </div>
+          {transactions.length === 0 ? (
+            <div className={styles.empty}>
+              <p>There's no transactions.</p>
             </div>
-          ))}
+          ) : (
+            transactions.map((transaction) => (
+              <div
+                className={`${styles.transactionContainer} ${
+                  transaction.type === "expense"
+                    ? styles.expenseTransaction
+                    : styles.incomeTransaction
+                }`}
+                key={transaction.id}
+              >
+                <div className={styles.transactionTitle}>
+                  <span>{transaction.id}</span>
+                  <h1>{transaction.description}</h1>
+                  <h3 className={styles.date}>
+                    {formatDate(transaction.createdAt)}
+                  </h3>
+                </div>
+                <div className={styles.amounts}>
+                  <span>{transaction.type}</span>
+
+                  <h4>Transaction amount:</h4>
+                  <h3>${transaction.amount}</h3>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </main>
     </>

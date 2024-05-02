@@ -5,6 +5,7 @@ import styles from "../../styles/budget.module.scss";
 import ConfirmationDelete from "./ConfirmationDelete";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
+import axios from "axios";
 
 const BudgetDetail = () => {
   const navigate = useNavigate();
@@ -13,18 +14,16 @@ const BudgetDetail = () => {
   const [categories, setCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleted, setDeleted] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
+  const [limitAmount, setLimitAmount] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await axios.get(
           `http://localhost:3000/api/budget/get/${budgetId}`
         );
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos");
-        }
-        const responseData = await response.json();
-        setBudget(responseData);
+        setBudget(response.data);
       } catch (error) {
         console.error("Error al obtener los datos:", error.message);
       }
@@ -32,14 +31,10 @@ const BudgetDetail = () => {
 
     const fetchCategories = async () => {
       try {
-        const response = await fetch(
+        const response = await axios.get(
           `http://localhost:3000/api/categories/get/${budgetId}`
         );
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos");
-        }
-        const categories = await response.json();
-        setCategories(categories);
+        setCategories(response.data);
       } catch (error) {
         console.error("Error al obtener los datos:", error.message);
       }
@@ -55,39 +50,57 @@ const BudgetDetail = () => {
 
   const handleDeleteConfirmed = async (confirmationText) => {
     if (!confirmationText) {
-      // Mostrar notificación de error si no se proporcionó ningún texto
       return toast.error(
         "Por favor, ingresa el nombre del presupuesto para confirmar la eliminación."
       );
     }
 
     if (confirmationText !== budget.name) {
-      // Mostrar notificación de error si el nombre ingresado no coincide con el nombre del presupuesto
       return toast.error("El nombre del presupuesto ingresado es incorrecto.");
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/budget/delete/${budgetId}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Error al eliminar el presupuesto");
-      }
-
+      await axios.delete(`http://localhost:3000/api/budget/delete/${budgetId}`);
       setDeleted(true);
       navigate("/budget");
     } catch (error) {
       console.error("Error al eliminar el presupuesto:", error.message);
     }
   };
+
   const formatDate = (dateString) => {
     return dateString
       ? format(new Date(dateString), "EEEE, d MMMM yyyy HH:mm")
       : "";
+  };
+
+  const handleCreateCategory = async () => {
+    if (!categoryName || !limitAmount) {
+      return toast.error(
+        "Por favor, ingresa el nombre y el monto límite de la categoría."
+      );
+    }
+
+    try {
+      await axios.post(
+        `http://localhost:3000/api/categories/create/${budgetId}`,
+        {
+          name: categoryName,
+          limit: parseFloat(limitAmount),
+        }
+      );
+      navigate(0);
+    } catch (error) {
+      console.error("Error al crear la categoría:", error.message);
+    }
+  };
+
+  const handleCategoryNameChange = (event) => {
+    setCategoryName(event.target.value);
+  };
+
+  const handleLimitAmountChange = (event) => {
+    setLimitAmount(event.target.value);
   };
 
   return (
@@ -100,13 +113,35 @@ const BudgetDetail = () => {
         position="bottom-center"
       />
       <main className={styles.detailsContainer}>
-        <div className={styles.detailsTitle}>
-          <span> {budget.id}</span>
-          <h1>{budget.name}</h1>
-          <h3>{formatDate(budget.createdAt)}</h3>
+        <div className={styles.data}>
+          <div className={styles.detailsTitle}>
+            <span> {budget.id}</span>
+            <h1>{budget.name}</h1>
+            <h3>{formatDate(budget.createdAt)}</h3>
+          </div>
+          <div className={styles.input}>
+            <h1>Budget categories:</h1>
+            <div>
+              <input
+                type="text"
+                placeholder="Category name"
+                value={categoryName}
+                onChange={handleCategoryNameChange}
+              />
+              <input
+                type="text"
+                placeholder="Limit amount"
+                value={limitAmount}
+                onChange={handleLimitAmountChange}
+              />
+              <button onClick={handleCreateCategory}>
+                Create new category
+              </button>
+            </div>
+          </div>
         </div>
+
         <div className={styles.categoriesContainer}>
-          <h1>Categories:</h1>
           {categories.map((category) => (
             <Link
               className={styles.categoryContainer}
@@ -130,6 +165,7 @@ const BudgetDetail = () => {
             </Link>
           ))}
         </div>
+
         <footer className={styles.budgetFooter}>
           <button onClick={handleDelete}>Delete this budget</button>
         </footer>

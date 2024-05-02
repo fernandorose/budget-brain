@@ -16,6 +16,20 @@
     flex-direction: column;
     flex-wrap: wrap;
     gap: 10px;
+    .empty {
+      display: grid;
+      place-content: center;
+      width: 100%;
+      height: calc(100dvh - 300px);
+      p {
+        font-size: 2rem;
+        font-family: $mono-font;
+        background: linear-gradient(140deg, #d7e2eb, transparent);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
   }
   //   .transactionContainer {
   //     display: flex;

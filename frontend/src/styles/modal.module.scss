@@ -47,3 +47,9 @@ input {
     border: solid 1px $bad;
   }
 }
+
+.createContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
