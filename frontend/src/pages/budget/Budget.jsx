@@ -1,17 +1,20 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import io from "socket.io-client";
 import { Link, useNavigate } from "react-router-dom";
 import Cookie from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { format } from "date-fns";
 import styles from "../../styles/budget.module.scss";
-import { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+
+const ENDPOINT = "http://localhost:3000"; // Cambia esto por la URL de tu servidor WebSocket
 
 const Budget = () => {
   const navigate = useNavigate();
 
-  const [budget, setBudget] = useState([]);
+  const [budgets, setBudgets] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [budgetName, setBudgetName] = useState("");
 
@@ -24,18 +27,30 @@ const Budget = () => {
       navigate("/signin");
     }
 
+    const socket = io(ENDPOINT);
+
+    // Escuchar eventos de WebSocket para la creación de un nuevo presupuesto
+    socket.on("budget_created", (newBudget) => {
+      setBudgets((prevBudgets) => [...prevBudgets, newBudget]);
+    });
+
+    // Obtener la lista inicial de presupuestos
     const fetchData = async () => {
       try {
         const response = await axios.get(
           `http://localhost:3000/api/budgets/get/${decodeToken.userId}`
         );
-        setBudget(response.data);
+        setBudgets(response.data);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       }
     };
 
     fetchData();
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   const formatDate = (dateString) => {
@@ -55,7 +70,7 @@ const Budget = () => {
           name: budgetName,
         }
       );
-      navigate(0);
+      setBudgetName(""); // Limpiar el campo de nombre después de crear el presupuesto
     } catch (error) {
       console.error("Error creating budget:", error.message);
     }
@@ -88,7 +103,7 @@ const Budget = () => {
           </div>
         </div>
         <div className={styles.dataContainer}>
-          {budget.map((budget) => (
+          {budgets.map((budget) => (
             <Link
               className={styles.budgetsData}
               to={`/budget/${budget.id}`}

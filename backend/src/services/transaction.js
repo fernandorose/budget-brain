@@ -1,6 +1,7 @@
 import { Category } from "../models/category.js";
 import { Transaction } from "../models/transaction.js";
 import { User } from "../models/user.js";
+import io from "../index.js";
 
 export const createTransaction = async (req, res) => {
   const { userId, categoryId } = req.params;
@@ -40,6 +41,8 @@ export const createTransaction = async (req, res) => {
       user_id: getUser.id,
       category_id: getCategory.id,
     });
+
+    io.emit("transaction_created", create);
 
     res.json(create);
   } catch (error) {

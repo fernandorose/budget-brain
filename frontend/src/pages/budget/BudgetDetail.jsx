@@ -6,6 +6,9 @@ import ConfirmationDelete from "./ConfirmationDelete";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import axios from "axios";
+import io from "socket.io-client";
+
+const ENDPOINT = "http://localhost:3000";
 
 const BudgetDetail = () => {
   const navigate = useNavigate();
@@ -18,6 +21,12 @@ const BudgetDetail = () => {
   const [limitAmount, setLimitAmount] = useState("");
 
   useEffect(() => {
+    const socket = io(ENDPOINT);
+
+    socket.on("category_created", (newCateory) => {
+      setCategories((prevCategories) => [...prevCategories, newCateory]);
+    });
+
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -42,6 +51,10 @@ const BudgetDetail = () => {
 
     fetchData();
     fetchCategories();
+
+    return () => {
+      socket.disconnect();
+    };
   }, [budgetId]);
 
   const handleDelete = () => {
@@ -89,7 +102,6 @@ const BudgetDetail = () => {
           limit: parseFloat(limitAmount),
         }
       );
-      navigate(0);
     } catch (error) {
       console.error("Error al crear la categoría:", error.message);
     }

@@ -1,18 +1,35 @@
 import { Budget } from "../models/budget.js";
 import { Category } from "../models/category.js";
+import io from "../index.js";
 
 export const createCategory = async (req, res) => {
   const { budgetId } = req.params;
   const { name, limit } = req.body;
-  const getBudget = await Budget.findByPk(budgetId);
-  const original_limit = limit;
-  const create = await Category.create({
-    name,
-    limit,
-    original_limit,
-    budget_id: getBudget.id,
-  });
-  res.json(create);
+
+  try {
+    // Obtener el presupuesto asociado a la categoría
+    const budget = await Budget.findByPk(budgetId);
+    if (!budget) {
+      return res.status(404).json({ error: "Budget not found" });
+    }
+
+    // Crear la categoría en la base de datos
+    const original_limit = limit;
+    const category = await Category.create({
+      name,
+      limit,
+      original_limit,
+      budget_id: budget.id,
+    });
+
+    // Emitir un evento WebSocket informando sobre la creación de la categoría
+    io.emit("category_created", category);
+
+    res.json(category);
+  } catch (error) {
+    console.error("Error creating category:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 export const getCategoriesByBudgetId = async (req, res) => {

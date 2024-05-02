@@ -23,6 +23,8 @@ import categoryRoutes from "./routes/category.js";
 import transactionRoutes from "./routes/transaction.js";
 import { User } from "./models/user.js";
 import { Budget } from "./models/budget.js";
+import { Category } from "./models/category.js";
+import { Transaction } from "./models/transaction.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -63,18 +65,29 @@ io.on("connection", (socket) => {
       // Obtener los datos de la base de datos utilizando Sequelize
       const users = await User.findAll();
       const budgets = await Budget.findAll();
+      const categories = await Category.findAll();
+      const transactions = await Transaction.findAll();
 
       // Procesar los datos y generar un mensaje para el bot
       let userNames = "Usuarios en la base de datos:\n";
       let budgetData = "Presupuestos en la base de datos:\n";
+      let categoryData = "Categorias en la base de datos:\n";
+      let transactionData = "Transactions en la base de datos:\n";
+
       users.forEach((user) => {
         userNames += `Nombre:  ${user.first_name}\n`;
       });
       budgets.forEach((budget) => {
         budgetData += `Nombre:  ${budget.name}\n`;
       });
+      categories.forEach((category) => {
+        categoryData += `Nombre:  ${category.name}\nMonto limite: ${category.limit}\nMonto limite original: ${category.original_limit}`;
+      });
+      transactions.forEach((transaction) => {
+        transactionData += `Descripcion:  ${transaction.description}\nMonto: ${transaction.amount}\nTipo: ${transaction.type}`;
+      });
       // Generar el mensaje para el bot que incluye los datos de la tabla
-      const botMessage = `Se han encontrado ${users.length} usuarios:\n${userNames}\nSe han encontrado ${budgets.length} presupuestos:\n${budgetData}`;
+      const botMessage = `Se han encontrado ${users.length} usuarios:\n${userNames}\nSe han encontrado ${budgets.length} presupuestos:\n${budgetData}\nSe han encontrado ${categories.length} categorias: ${categoryData}\nSe han encontrado ${transactions.length} transacciones:\n${transactionData}`;
 
       // Enviar el mensaje del usuario junto con los datos de la tabla al bot
       const response = await openai.chat.completions.create({
@@ -112,5 +125,5 @@ const main = async () => {
   });
   await sequelize.sync({ force: false });
 };
-
+export default io;
 main();
