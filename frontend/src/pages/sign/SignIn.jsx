@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Cookie from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/ReactToastify.css";
+import styles from "../../styles/sign.module.scss";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const sessionCookie = Cookie.get("session");
 
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     if (sessionCookie) {
@@ -16,6 +19,11 @@ const SignIn = () => {
   });
 
   const handleSignIn = async () => {
+    if (!email || !password) {
+      toast.error("Please fill all inputs");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:3000/api/users/login", {
         method: "POST",
@@ -38,9 +46,17 @@ const SignIn = () => {
   };
   return (
     <>
-      <main>
-        <h1>SignIn</h1>
-        <div>
+      <ToastContainer
+        hideProgressBar
+        theme="dark"
+        draggable
+        stacked
+        position="bottom-center"
+      />
+      <main className={styles.signContainer}>
+        <div className={styles.input}>
+          <img src="/logo.svg" alt="" />
+          <h1>SignIn</h1>
           <input
             type="email"
             placeholder="email"
@@ -54,6 +70,9 @@ const SignIn = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button onClick={handleSignIn}>Sign in</button>
+          <p>
+            Don't have an account? <Link to={"/signup"}>Sign up</Link>
+          </p>
         </div>
       </main>
     </>

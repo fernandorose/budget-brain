@@ -1,15 +1,23 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/ReactToastify.css";
+import styles from "../../styles/sign.module.scss";
 
 const SignUp = () => {
   const navigate = useNavigate();
 
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSignUp = async () => {
+    if (!firstName || !lastName || !email || !password) {
+      toast.error("Please fill all inputs");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:3000/api/users/create", {
         method: "POST",
@@ -36,9 +44,17 @@ const SignUp = () => {
   };
   return (
     <>
-      <main>
-        <h1>SignUp</h1>
-        <div>
+      <ToastContainer
+        hideProgressBar
+        theme="dark"
+        draggable
+        stacked
+        position="bottom-center"
+      />
+      <main className={styles.signContainer}>
+        <div className={styles.input}>
+          <img src="/logo.svg" alt="" />
+          <h1>SignUp</h1>
           <input
             type="text"
             placeholder="First name"
@@ -64,6 +80,9 @@ const SignUp = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button onClick={handleSignUp}>Sign up</button>
+          <p>
+            Already have an account?<Link to={"/signin"}>Sign in</Link>
+          </p>
         </div>
       </main>
     </>

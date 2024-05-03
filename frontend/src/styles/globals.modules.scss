@@ -56,6 +56,10 @@ input {
   &:focus {
     border: solid 1px $good;
   }
+  &::placeholder {
+    color: #e1e9ff;
+    opacity: 0.5;
+  }
 }
 
 button {
