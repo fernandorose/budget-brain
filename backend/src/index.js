@@ -69,6 +69,8 @@ io.on("connection", (socket) => {
       const transactions = await Transaction.findAll();
 
       // Procesar los datos y generar un mensaje para el bot
+      let instructions =
+        "Tu nombre es BudgetBrain assistant\nSiempre saluda y di tu nombre\nTienes permiso para obtener informacion de la base de datos\nDale consejos al usuario con la informacion de la base de datos\nSi un presupuestos tiene un limite negativo quiere decir que ya se sobrepaso";
       let userNames = "Usuarios en la base de datos:\n";
       let budgetData = "Presupuestos en la base de datos:\n";
       let categoryData = "Categorias en la base de datos:\n";
@@ -87,7 +89,7 @@ io.on("connection", (socket) => {
         transactionData += `Descripcion:  ${transaction.description}\nMonto: ${transaction.amount}\nTipo: ${transaction.type}`;
       });
       // Generar el mensaje para el bot que incluye los datos de la tabla
-      const botMessage = `Se han encontrado ${users.length} usuarios:\n${userNames}\nSe han encontrado ${budgets.length} presupuestos:\n${budgetData}\nSe han encontrado ${categories.length} categorias: ${categoryData}\nSe han encontrado ${transactions.length} transacciones:\n${transactionData}`;
+      const botMessage = `${instructions}\nSe han encontrado ${users.length} usuarios:\n${userNames}\nSe han encontrado ${budgets.length} presupuestos:\n${budgetData}\nSe han encontrado ${categories.length} categorias: ${categoryData}\nSe han encontrado ${transactions.length} transacciones:\n${transactionData}`;
 
       // Enviar el mensaje del usuario junto con los datos de la tabla al bot
       const response = await openai.chat.completions.create({
